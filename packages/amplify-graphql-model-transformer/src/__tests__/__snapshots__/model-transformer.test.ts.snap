@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ModelTransformer:  should filter known input types from create and update input fields 1`] = `
+exports[`ModelTransformer: should filter known input types from create and update input fields 1`] = `
 "
 type Test {
   id: ID!
@@ -265,7 +265,7 @@ input ModelSubscriptionEmailFilterInput {
 "
 `;
 
-exports[`ModelTransformer:  should generate enum input objects 1`] = `
+exports[`ModelTransformer: should generate enum input objects 1`] = `
 "
 type Post {
   id: ID!
@@ -748,7 +748,7 @@ input ModelSubscriptionCommentFilterInput {
 "
 `;
 
-exports[`ModelTransformer:  should generate sync resolver with ConflictHandlerType.Automerge 1`] = `
+exports[`ModelTransformer: should generate sync resolver with ConflictHandlerType.Automerge 1`] = `
 Object {
   "Mutation.createPost.init.1.req.vtl": "## [Start] Initialization default values. **
 $util.qr($ctx.stash.put(\\"defaultValues\\", $util.defaultIfNull($ctx.stash.defaultValues, {})))
@@ -779,7 +779,9 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Post\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition
+  \\"condition\\": $condition,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -851,7 +853,9 @@ $util.toJson({})
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 #set( $DeleteRequest = {
   \\"version\\": \\"2018-05-29\\",
-  \\"operation\\": \\"DeleteItem\\"
+  \\"operation\\": \\"DeleteItem\\",
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $ctx.stash.metadata.modelObjectKey )
   #set( $Key = $ctx.stash.metadata.modelObjectKey )
@@ -1050,6 +1054,8 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
   \\"update\\": $update,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false,
   \\"_version\\": $util.defaultIfNull($args.input[\\"_version\\"], 0)
 } )
 #if( $Conditions )
@@ -1213,14 +1219,12 @@ $util.toJson({})
 {
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"Sync\\",
-  \\"filter\\":   #if( $filter )
-$util.toJson($filter)
-  #else
-null
-  #end,
+  \\"filter\\": #if( $filter ) $util.toJson($filter) #else null #end,
   \\"limit\\": $util.defaultIfNull($args.limit, 100),
   \\"lastSync\\": $util.toJson($util.defaultIfNull($args.lastSync, null)),
-  \\"nextToken\\": $util.toJson($util.defaultIfNull($args.nextToken, null))
+  \\"nextToken\\": $util.toJson($util.defaultIfNull($args.nextToken, null)),
+  \\"basePartitionKey\\": #if( $filter ) null #else null #end,
+  \\"deltaIndexName\\": \\"deltaSyncGSI\\"
 }
 ## [End] Sync Request template. **",
   "Query.syncPosts.res.vtl": "## [Start] ResponseTemplate. **
@@ -1287,7 +1291,7 @@ $util.toJson(null)
 }
 `;
 
-exports[`ModelTransformer:  should generate sync resolver with ConflictHandlerType.LAMBDA 1`] = `
+exports[`ModelTransformer: should generate sync resolver with ConflictHandlerType.LAMBDA 1`] = `
 Object {
   "Mutation.createPost.init.1.req.vtl": "## [Start] Initialization default values. **
 $util.qr($ctx.stash.put(\\"defaultValues\\", $util.defaultIfNull($ctx.stash.defaultValues, {})))
@@ -1318,7 +1322,9 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Post\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition
+  \\"condition\\": $condition,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -1390,7 +1396,9 @@ $util.toJson({})
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 #set( $DeleteRequest = {
   \\"version\\": \\"2018-05-29\\",
-  \\"operation\\": \\"DeleteItem\\"
+  \\"operation\\": \\"DeleteItem\\",
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $ctx.stash.metadata.modelObjectKey )
   #set( $Key = $ctx.stash.metadata.modelObjectKey )
@@ -1589,6 +1597,8 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
   \\"update\\": $update,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false,
   \\"_version\\": $util.defaultIfNull($args.input[\\"_version\\"], 0)
 } )
 #if( $Conditions )
@@ -1752,14 +1762,12 @@ $util.toJson({})
 {
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"Sync\\",
-  \\"filter\\":   #if( $filter )
-$util.toJson($filter)
-  #else
-null
-  #end,
+  \\"filter\\": #if( $filter ) $util.toJson($filter) #else null #end,
   \\"limit\\": $util.defaultIfNull($args.limit, 100),
   \\"lastSync\\": $util.toJson($util.defaultIfNull($args.lastSync, null)),
-  \\"nextToken\\": $util.toJson($util.defaultIfNull($args.nextToken, null))
+  \\"nextToken\\": $util.toJson($util.defaultIfNull($args.nextToken, null)),
+  \\"basePartitionKey\\": #if( $filter ) null #else null #end,
+  \\"deltaIndexName\\": \\"deltaSyncGSI\\"
 }
 ## [End] Sync Request template. **",
   "Query.syncPosts.res.vtl": "## [Start] ResponseTemplate. **
@@ -1826,7 +1834,7 @@ $util.toJson(null)
 }
 `;
 
-exports[`ModelTransformer:  should generate sync resolver with ConflictHandlerType.Optimistic 1`] = `
+exports[`ModelTransformer: should generate sync resolver with ConflictHandlerType.Optimistic 1`] = `
 Object {
   "Mutation.createPost.init.1.req.vtl": "## [Start] Initialization default values. **
 $util.qr($ctx.stash.put(\\"defaultValues\\", $util.defaultIfNull($ctx.stash.defaultValues, {})))
@@ -1857,7 +1865,9 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Post\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition
+  \\"condition\\": $condition,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -1929,7 +1939,9 @@ $util.toJson({})
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 #set( $DeleteRequest = {
   \\"version\\": \\"2018-05-29\\",
-  \\"operation\\": \\"DeleteItem\\"
+  \\"operation\\": \\"DeleteItem\\",
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $ctx.stash.metadata.modelObjectKey )
   #set( $Key = $ctx.stash.metadata.modelObjectKey )
@@ -2128,6 +2140,8 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
   \\"update\\": $update,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false,
   \\"_version\\": $util.defaultIfNull($args.input[\\"_version\\"], 0)
 } )
 #if( $Conditions )
@@ -2291,14 +2305,12 @@ $util.toJson({})
 {
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"Sync\\",
-  \\"filter\\":   #if( $filter )
-$util.toJson($filter)
-  #else
-null
-  #end,
+  \\"filter\\": #if( $filter ) $util.toJson($filter) #else null #end,
   \\"limit\\": $util.defaultIfNull($args.limit, 100),
   \\"lastSync\\": $util.toJson($util.defaultIfNull($args.lastSync, null)),
-  \\"nextToken\\": $util.toJson($util.defaultIfNull($args.nextToken, null))
+  \\"nextToken\\": $util.toJson($util.defaultIfNull($args.nextToken, null)),
+  \\"basePartitionKey\\": #if( $filter ) null #else null #end,
+  \\"deltaIndexName\\": \\"deltaSyncGSI\\"
 }
 ## [End] Sync Request template. **",
   "Query.syncPosts.res.vtl": "## [Start] ResponseTemplate. **
@@ -2365,7 +2377,7 @@ $util.toJson(null)
 }
 `;
 
-exports[`ModelTransformer:  should have timestamps as nullable fields when the type makes it non-nullable 1`] = `
+exports[`ModelTransformer: should have timestamps as nullable fields when the type makes it non-nullable 1`] = `
 "
 type Post {
   id: ID!
@@ -2595,7 +2607,7 @@ type Subscription {
 "
 `;
 
-exports[`ModelTransformer:  should have timestamps as nullable fields when the type makes it non-nullable 2`] = `
+exports[`ModelTransformer: should have timestamps as nullable fields when the type makes it non-nullable 2`] = `
 "## [Start] Create Request template. **
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 ## Set the default values to put request **
@@ -2608,7 +2620,9 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Post\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition
+  \\"condition\\": $condition,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -2664,7 +2678,7 @@ $util.toJson($PutObject)
 ## [End] Create Request template. **"
 `;
 
-exports[`ModelTransformer:  should have timestamps as nullable fields when the type makes it non-nullable 3`] = `
+exports[`ModelTransformer: should have timestamps as nullable fields when the type makes it non-nullable 3`] = `
 "## [Start] Mutation Update resolver. **
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 ## Set the default values to put request **
@@ -2785,7 +2799,9 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
-  \\"update\\": $update
+  \\"update\\": $update,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $Conditions )
   #if( $keyConditionExprNames )
@@ -2797,7 +2813,7 @@ $util.toJson($UpdateItem)
 ## [End] Mutation Update resolver. **"
 `;
 
-exports[`ModelTransformer:  should not add default primary key when ID is defined 1`] = `
+exports[`ModelTransformer: should not add default primary key when ID is defined 1`] = `
 "## [Start] Create Request template. **
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 ## Set the default values to put request **
@@ -2810,7 +2826,9 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Post\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition
+  \\"condition\\": $condition,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -2866,7 +2884,7 @@ $util.toJson($PutObject)
 ## [End] Create Request template. **"
 `;
 
-exports[`ModelTransformer:  should not generate superfluous input and filter types 1`] = `
+exports[`ModelTransformer: should not generate superfluous input and filter types 1`] = `
 "
 type Entity {
   id: ID!
@@ -3032,7 +3050,7 @@ type Query {
 "
 `;
 
-exports[`ModelTransformer:  should not to auto generate createdAt and updatedAt when the type in schema is not AWSDateTime 1`] = `
+exports[`ModelTransformer: should not to auto generate createdAt and updatedAt when the type in schema is not AWSDateTime 1`] = `
 "
 type Post {
   id: ID!
@@ -3262,7 +3280,7 @@ type Subscription {
 "
 `;
 
-exports[`ModelTransformer:  should not to auto generate createdAt and updatedAt when the type in schema is not AWSDateTime 2`] = `
+exports[`ModelTransformer: should not to auto generate createdAt and updatedAt when the type in schema is not AWSDateTime 2`] = `
 "## [Start] Create Request template. **
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 ## Set the default values to put request **
@@ -3275,7 +3293,9 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Post\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition
+  \\"condition\\": $condition,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -3331,7 +3351,7 @@ $util.toJson($PutObject)
 ## [End] Create Request template. **"
 `;
 
-exports[`ModelTransformer:  should not to auto generate createdAt and updatedAt when the type in schema is not AWSDateTime 3`] = `
+exports[`ModelTransformer: should not to auto generate createdAt and updatedAt when the type in schema is not AWSDateTime 3`] = `
 "## [Start] Mutation Update resolver. **
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 ## Set the default values to put request **
@@ -3452,7 +3472,9 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
-  \\"update\\": $update
+  \\"update\\": $update,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $Conditions )
   #if( $keyConditionExprNames )
@@ -3464,7 +3486,7 @@ $util.toJson($UpdateItem)
 ## [End] Mutation Update resolver. **"
 `;
 
-exports[`ModelTransformer:  should not to include createdAt and updatedAt field when timestamps is set to null 1`] = `
+exports[`ModelTransformer: should not to include createdAt and updatedAt field when timestamps is set to null 1`] = `
 "
 type Post {
   id: ID!
@@ -3682,7 +3704,7 @@ type Subscription {
 "
 `;
 
-exports[`ModelTransformer:  should not to include createdAt and updatedAt field when timestamps is set to null 2`] = `
+exports[`ModelTransformer: should not to include createdAt and updatedAt field when timestamps is set to null 2`] = `
 "## [Start] Create Request template. **
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 ## Set the default values to put request **
@@ -3695,7 +3717,9 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Post\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition
+  \\"condition\\": $condition,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -3751,7 +3775,7 @@ $util.toJson($PutObject)
 ## [End] Create Request template. **"
 `;
 
-exports[`ModelTransformer:  should not to include createdAt and updatedAt field when timestamps is set to null 3`] = `
+exports[`ModelTransformer: should not to include createdAt and updatedAt field when timestamps is set to null 3`] = `
 "## [Start] Mutation Update resolver. **
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 ## Set the default values to put request **
@@ -3872,7 +3896,9 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
-  \\"update\\": $update
+  \\"update\\": $update,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $Conditions )
   #if( $keyConditionExprNames )
@@ -3884,7 +3910,7 @@ $util.toJson($UpdateItem)
 ## [End] Mutation Update resolver. **"
 `;
 
-exports[`ModelTransformer:  should support timestamp parameters when generating resolvers and output schema 1`] = `
+exports[`ModelTransformer: should support timestamp parameters when generating resolvers and output schema 1`] = `
 "
 type Post {
   id: ID!
@@ -4104,7 +4130,7 @@ type Subscription {
 "
 `;
 
-exports[`ModelTransformer:  should support timestamp parameters when generating resolvers and output schema 2`] = `
+exports[`ModelTransformer: should support timestamp parameters when generating resolvers and output schema 2`] = `
 "## [Start] Create Request template. **
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 ## Set the default values to put request **
@@ -4117,7 +4143,9 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Post\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition
+  \\"condition\\": $condition,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -4173,7 +4201,7 @@ $util.toJson($PutObject)
 ## [End] Create Request template. **"
 `;
 
-exports[`ModelTransformer:  should support timestamp parameters when generating resolvers and output schema 3`] = `
+exports[`ModelTransformer: should support timestamp parameters when generating resolvers and output schema 3`] = `
 "## [Start] Mutation Update resolver. **
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 ## Set the default values to put request **
@@ -4294,7 +4322,9 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
-  \\"update\\": $update
+  \\"update\\": $update,
+  \\"hasCustomPrimaryKey\\":   false,
+  \\"populateGSIFields\\":   false
 } )
 #if( $Conditions )
   #if( $keyConditionExprNames )
@@ -4306,7 +4336,7 @@ $util.toJson($UpdateItem)
 ## [End] Mutation Update resolver. **"
 `;
 
-exports[`ModelTransformer:  the datastore table should be configured 1`] = `
+exports[`ModelTransformer: the datastore table should be configured 1`] = `
 "## [Start] Sync Request template. **
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 #if( !$util.isNullOrEmpty($ctx.stash.authFilter) )
@@ -4333,19 +4363,17 @@ exports[`ModelTransformer:  the datastore table should be configured 1`] = `
 {
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"Sync\\",
-  \\"filter\\":   #if( $filter )
-$util.toJson($filter)
-  #else
-null
-  #end,
+  \\"filter\\": #if( $filter ) $util.toJson($filter) #else null #end,
   \\"limit\\": $util.defaultIfNull($args.limit, 100),
   \\"lastSync\\": $util.toJson($util.defaultIfNull($args.lastSync, null)),
-  \\"nextToken\\": $util.toJson($util.defaultIfNull($args.nextToken, null))
+  \\"nextToken\\": $util.toJson($util.defaultIfNull($args.nextToken, null)),
+  \\"basePartitionKey\\": #if( $filter ) null #else null #end,
+  \\"deltaIndexName\\": \\"deltaSyncGSI\\"
 }
 ## [End] Sync Request template. **"
 `;
 
-exports[`ModelTransformer:  the datastore table should be configured 2`] = `
+exports[`ModelTransformer: the datastore table should be configured 2`] = `
 "## [Start] ResponseTemplate. **
 #if( $ctx.error )
   $util.error($ctx.error.message, $ctx.error.type, $ctx.result)
