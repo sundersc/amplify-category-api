@@ -49,8 +49,8 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Test\\"))
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
   \\"condition\\": $condition,
-  \\"hasCustomPrimaryKey\\":   true,
-  \\"populateGSIFields\\":   true
+  \\"hasCustomPartitionKey\\": true,
+  \\"populateIndexFields\\": true
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -134,8 +134,8 @@ $util.qr($ctx.stash.metadata.put(\\"modelObjectKey\\", {
 #set( $DeleteRequest = {
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"DeleteItem\\",
-  \\"hasCustomPrimaryKey\\":   true,
-  \\"populateGSIFields\\":   true
+  \\"hasCustomPartitionKey\\": true,
+  \\"populateIndexFields\\": true
 } )
 #if( $ctx.stash.metadata.modelObjectKey )
   #set( $Key = $ctx.stash.metadata.modelObjectKey )
@@ -350,8 +350,8 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
   \\"update\\": $update,
-  \\"hasCustomPrimaryKey\\":   true,
-  \\"populateGSIFields\\":   true
+  \\"hasCustomPartitionKey\\": true,
+  \\"populateIndexFields\\": true
 } )
 #if( $Conditions )
   #if( $keyConditionExprNames )
@@ -698,8 +698,8 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Test\\"))
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
   \\"condition\\": $condition,
-  \\"hasCustomPrimaryKey\\":   true,
-  \\"populateGSIFields\\":   true
+  \\"hasCustomPartitionKey\\": true,
+  \\"populateIndexFields\\": true
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -783,8 +783,8 @@ $util.qr($ctx.stash.metadata.put(\\"modelObjectKey\\", {
 #set( $DeleteRequest = {
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"DeleteItem\\",
-  \\"hasCustomPrimaryKey\\":   true,
-  \\"populateGSIFields\\":   true
+  \\"hasCustomPartitionKey\\": true,
+  \\"populateIndexFields\\": true
 } )
 #if( $ctx.stash.metadata.modelObjectKey )
   #set( $Key = $ctx.stash.metadata.modelObjectKey )
@@ -994,8 +994,8 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
   \\"update\\": $update,
-  \\"hasCustomPrimaryKey\\":   true,
-  \\"populateGSIFields\\":   true
+  \\"hasCustomPartitionKey\\": true,
+  \\"populateIndexFields\\": true
 } )
 #if( $Conditions )
   #if( $keyConditionExprNames )
@@ -1294,9 +1294,7 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Test\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition,
-  \\"hasCustomPrimaryKey\\":   false,
-  \\"populateGSIFields\\":   false
+  \\"condition\\": $condition
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -1378,9 +1376,7 @@ $util.qr($ctx.stash.metadata.put(\\"modelObjectKey\\", {
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 #set( $DeleteRequest = {
   \\"version\\": \\"2018-05-29\\",
-  \\"operation\\": \\"DeleteItem\\",
-  \\"hasCustomPrimaryKey\\":   false,
-  \\"populateGSIFields\\":   false
+  \\"operation\\": \\"DeleteItem\\"
 } )
 #if( $ctx.stash.metadata.modelObjectKey )
   #set( $Key = $ctx.stash.metadata.modelObjectKey )
@@ -1588,9 +1584,7 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
-  \\"update\\": $update,
-  \\"hasCustomPrimaryKey\\":   false,
-  \\"populateGSIFields\\":   false
+  \\"update\\": $update
 } )
 #if( $Conditions )
   #if( $keyConditionExprNames )
@@ -1847,8 +1841,8 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Test\\"))
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
   \\"condition\\": $condition,
-  \\"hasCustomPrimaryKey\\":   true,
-  \\"populateGSIFields\\":   true
+  \\"hasCustomPartitionKey\\": true,
+  \\"populateIndexFields\\": true
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -1932,8 +1926,8 @@ $util.qr($ctx.stash.metadata.put(\\"modelObjectKey\\", {
 #set( $DeleteRequest = {
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"DeleteItem\\",
-  \\"hasCustomPrimaryKey\\":   true,
-  \\"populateGSIFields\\":   true
+  \\"hasCustomPartitionKey\\": true,
+  \\"populateIndexFields\\": true
 } )
 #if( $ctx.stash.metadata.modelObjectKey )
   #set( $Key = $ctx.stash.metadata.modelObjectKey )
@@ -2143,8 +2137,8 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
   \\"update\\": $update,
-  \\"hasCustomPrimaryKey\\":   true,
-  \\"populateGSIFields\\":   true
+  \\"hasCustomPartitionKey\\": true,
+  \\"populateIndexFields\\": true
 } )
 #if( $Conditions )
   #if( $keyConditionExprNames )
@@ -2444,9 +2438,7 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Test\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition,
-  \\"hasCustomPrimaryKey\\":   false,
-  \\"populateGSIFields\\":   false
+  \\"condition\\": $condition
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -2529,9 +2521,7 @@ $util.qr($ctx.stash.metadata.put(\\"modelObjectKey\\", {
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 #set( $DeleteRequest = {
   \\"version\\": \\"2018-05-29\\",
-  \\"operation\\": \\"DeleteItem\\",
-  \\"hasCustomPrimaryKey\\":   false,
-  \\"populateGSIFields\\":   false
+  \\"operation\\": \\"DeleteItem\\"
 } )
 #if( $ctx.stash.metadata.modelObjectKey )
   #set( $Key = $ctx.stash.metadata.modelObjectKey )
@@ -2740,9 +2730,7 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
-  \\"update\\": $update,
-  \\"hasCustomPrimaryKey\\":   false,
-  \\"populateGSIFields\\":   false
+  \\"update\\": $update
 } )
 #if( $Conditions )
   #if( $keyConditionExprNames )
@@ -2920,9 +2908,7 @@ $util.qr($mergedValues.put(\\"__typename\\", \\"Test\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"PutItem\\",
   \\"attributeValues\\":   $util.dynamodb.toMapValues($mergedValues),
-  \\"condition\\": $condition,
-  \\"hasCustomPrimaryKey\\":   false,
-  \\"populateGSIFields\\":   false
+  \\"condition\\": $condition
 } )
 #if( $args.condition )
   $util.qr($ctx.stash.conditions.add($args.condition))
@@ -3005,9 +2991,7 @@ $util.qr($ctx.stash.metadata.put(\\"modelObjectKey\\", {
 #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
 #set( $DeleteRequest = {
   \\"version\\": \\"2018-05-29\\",
-  \\"operation\\": \\"DeleteItem\\",
-  \\"hasCustomPrimaryKey\\":   false,
-  \\"populateGSIFields\\":   false
+  \\"operation\\": \\"DeleteItem\\"
 } )
 #if( $ctx.stash.metadata.modelObjectKey )
   #set( $Key = $ctx.stash.metadata.modelObjectKey )
@@ -3216,9 +3200,7 @@ $util.qr($update.put(\\"expression\\", \\"$expression\\"))
   \\"version\\": \\"2018-05-29\\",
   \\"operation\\": \\"UpdateItem\\",
   \\"key\\": $Key,
-  \\"update\\": $update,
-  \\"hasCustomPrimaryKey\\":   false,
-  \\"populateGSIFields\\":   false
+  \\"update\\": $update
 } )
 #if( $Conditions )
   #if( $keyConditionExprNames )
