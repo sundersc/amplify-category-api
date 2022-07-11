@@ -46,6 +46,10 @@ export type ResolverConfig = {
     [key: string]: SyncConfig;
   };
 };
+
+export type StorageType = {
+  type: 'NoSQL' | 'RDS';
+}
 /**
  * The transform config is specified in transform.conf.json within an Amplify
  * API project directory.
@@ -104,6 +108,7 @@ export interface TransformConfig {
    * List of custom transformer plugins
    */
   transformers?: string[];
+  Storage?: StorageType;
   warningESMessage?: boolean;
 }
 /**

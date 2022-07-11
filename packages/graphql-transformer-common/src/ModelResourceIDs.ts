@@ -100,6 +100,9 @@ export class ModelResourceIDs {
   static ModelCreateInputObjectName(typeName: string): string {
     return graphqlName(`Create` + toUpper(typeName) + 'Input');
   }
+  static ModelInputObjectName(typeName: string): string {
+    return graphqlName(`Model` + toUpper(typeName) + 'Input');
+  }
   static ModelOnCreateSubscriptionName(typeName: string): string {
     return graphqlName(`onCreate` + toUpper(typeName));
   }

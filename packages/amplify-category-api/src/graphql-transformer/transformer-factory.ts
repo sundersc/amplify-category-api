@@ -8,6 +8,8 @@ import {
 } from '@aws-amplify/graphql-index-transformer';
 import { MapsToTransformer as MapsToTransformerV2 } from '@aws-amplify/graphql-maps-to-transformer';
 import { ModelTransformer as ModelTransformerV2 } from '@aws-amplify/graphql-model-transformer';
+import { ModelTransformer as RDSModelTransformerV2 } from '@aws-amplify/graphql-model-rds-transformer';
+import { QueryTransformer as RDSQueryTransformerV2 } from '@aws-amplify/graphql-query-rds-transformer';
 import { PredictionsTransformer as PredictionsTransformerV2 } from '@aws-amplify/graphql-predictions-transformer';
 import {
   BelongsToTransformer as BelongsToTransformerV2,
@@ -56,18 +58,13 @@ type TransformerFactoryArgs = {
     identityPoolId?: string;
   };
 
-/**
- * Return the graphql transformer factory based on the projects current transformer version.
- */
-export const getTransformerFactory = async (
-  context: $TSContext,
-  resourceDir: string,
-  authConfig?: $TSAny,
-): Promise<(options: $TSAny) => Promise<(TransformerPluginProviderV2 | ITransformer)[]>> => {
-  const transformerVersion = await ApiCategoryFacade.getTransformerVersion(context);
-  return transformerVersion === 2
-    ? getTransformerFactoryV2(resourceDir)
-    : getTransformerFactoryV1(context, resourceDir, authConfig);
+const getRDSTransformerFactoryV2 = (): (options: TransformerFactoryArgs) => Promise<TransformerPluginProviderV2[]> => async () => {
+  const transformerList: TransformerPluginProviderV2[] = [
+    new RDSModelTransformerV2(),
+    new RDSQueryTransformerV2(),
+  ];
+
+  return transformerList;
 };
 
 const getTransformerFactoryV2 = (
@@ -230,4 +227,20 @@ const importTransformerModule = (transformerName: string) => {
     printer.error(`You may fix this error by editing transformers at ${path.join(transformerName, TRANSFORM_CONFIG_FILE_NAME)}`);
     throw error;
   }
+};
+
+/**
+ * Return the graphql transformer factory based on the projects current transformer version.
+ */
+export const getTransformerFactory = async (
+  context: $TSContext,
+  resourceDir: string,
+  authConfig?: $TSAny,
+): Promise<(options: $TSAny) => Promise<(TransformerPluginProviderV2 | ITransformer)[]>> => {
+  const transformerVersion = await ApiCategoryFacade.getTransformerVersion(context);
+  const transformerConfig = await readTransformerConfiguration(resourceDir);
+  if (transformerVersion === 2) {
+    return transformerConfig.Storage.type === 'RDS' ? getRDSTransformerFactoryV2() : getTransformerFactoryV2(resourceDir);
+  }
+  return getTransformerFactoryV1(context, resourceDir, authConfig);
 };

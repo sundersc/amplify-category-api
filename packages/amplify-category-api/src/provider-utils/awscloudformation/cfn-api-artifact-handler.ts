@@ -6,6 +6,7 @@ import {
   AppSyncServiceConfiguration,
   AppSyncServiceModification,
   ConflictResolution,
+  StorageType,
   ResolutionStrategy,
   UpdateApiRequest,
 } from 'amplify-headless-interface';
@@ -85,7 +86,7 @@ class CfnApiArtifactHandler implements ApiArtifactHandler {
 
     serviceConfig.conflictResolution = await this.createResolverResources(serviceConfig.conflictResolution);
     await writeResolverConfig(serviceConfig.conflictResolution, resourceDir);
-
+    await writeStorageConfig(serviceConfig.storage, resourceDir);
     const appsyncCLIInputs = await this.generateAppsyncCLIInputs(serviceConfig, resourceDir);
 
     // Write the default custom resources stack out to disk.
@@ -107,7 +108,7 @@ class CfnApiArtifactHandler implements ApiArtifactHandler {
 
     const dependsOn = amendDependsOnForAuthConfig([], authConfig);
 
-    this.context.amplify.updateamplifyMetaAfterResourceAdd(category, serviceConfig.apiName, this.createAmplifyMeta(authConfig, dependsOn));
+    this.context.amplify.updateamplifyMetaAfterResourceAdd(category, serviceConfig.apiName, this.createAmplifyMeta(authConfig, dependsOn, serviceConfig.storage));
     return serviceConfig.apiName;
   };
 
@@ -167,12 +168,13 @@ class CfnApiArtifactHandler implements ApiArtifactHandler {
   private getResourceDir = (apiName: string): string => pathManager.getResourceDirectoryPath(undefined, category, apiName);
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  private createAmplifyMeta = (authConfig: AuthConfig, dependsOn?: DependsOnEntry[]) => ({
+  private createAmplifyMeta = (authConfig: AuthConfig, dependsOn?: DependsOnEntry[], storageConfig?: StorageType) => ({
     service: 'AppSync',
     providerPlugin: provider,
     dependsOn,
     output: {
       authConfig,
+      storage: storageConfig,
     },
   });
 
@@ -354,6 +356,12 @@ class CfnApiArtifactHandler implements ApiArtifactHandler {
 export const writeResolverConfig = async (conflictResolution: ConflictResolution, resourceDir: string): Promise<void> => {
   const localTransformerConfig = await readTransformerConfiguration(resourceDir);
   localTransformerConfig.ResolverConfig = conflictResolutionToResolverConfig(conflictResolution);
+  await writeTransformerConfiguration(resourceDir, localTransformerConfig);
+};
+
+export const writeStorageConfig = async (storateType: StorageType, resourceDir: string): Promise<void> => {
+  const localTransformerConfig = await readTransformerConfiguration(resourceDir);
+  localTransformerConfig.Storage = storateType;
   await writeTransformerConfiguration(resourceDir, localTransformerConfig);
 };
 

@@ -12,6 +12,7 @@ import {
   UnknownResourceTypeError,
   getGraphQLTransformerAuthDocLink,
   ApiCategoryFacade,
+  $TSAny,
 } from 'amplify-cli-core';
 import { UpdateApiRequest } from 'amplify-headless-interface';
 import { printer, prompter } from 'amplify-prompts';
@@ -117,6 +118,17 @@ const schemaTemplatesV2 = [
   },
 ];
 
+const datasourceTypes = [
+  {
+    name: 'NoSQL (DynamoDB)',
+    value: 'NoSQL',
+  },
+  {
+    name: 'RDS (MySql)',
+    value: 'RDS',
+  },
+];
+
 export const openConsole = async (context: $TSContext) => {
   const amplifyMeta = stateManager.getMeta();
   const categoryAmplifyMeta = amplifyMeta[category];
@@ -212,6 +224,7 @@ const serviceApiInputWalkthrough = async (context: $TSContext, serviceMetadata) 
   let authConfig;
   let defaultAuthType;
   let resolverConfig;
+  let datasourceConfig;
   const { amplify } = context;
   const { inputs } = serviceMetadata;
   const allDefaultValues = getAllDefaults(amplify.getProjectDetails());
@@ -232,6 +245,8 @@ const serviceApiInputWalkthrough = async (context: $TSContext, serviceMetadata) 
     },
     additionalAuthenticationProviders: [],
   };
+
+  datasourceConfig = 'NoSQL';
 
   //
   // Repeat prompt until user selects Continue
@@ -259,6 +274,11 @@ const serviceApiInputWalkthrough = async (context: $TSContext, serviceMetadata) 
     basicInfoQuestionChoices.push({
       name: chalk`{bold Name:} ${resourceAnswers[inputs[1].key]}`,
       value: 'API_NAME',
+    });
+
+    basicInfoQuestionChoices.push({
+      name: chalk`{bold Storage Type:} ${datasourceConfig === 'RDS' ? 'RDS (MySql)' : 'NoSQL (DynamoDB)'}`,
+      value: 'DATASOURCE_TYPE',
     });
 
     basicInfoQuestionChoices.push({
@@ -319,6 +339,9 @@ const serviceApiInputWalkthrough = async (context: $TSContext, serviceMetadata) 
         ({ authConfig, defaultAuthType } = await askDefaultAuthQuestion(context));
         ({ authConfig } = await askAdditionalQuestions(context, authConfig, defaultAuthType));
         break;
+      case 'DATASOURCE_TYPE':
+        datasourceConfig = await askDatasourceQuestions(context, datasourceConfig);
+        break;
       case 'CONFLICT_DETECTION':
         resolverConfig = await askResolverConflictQuestion(context, resolverConfig);
         break;
@@ -328,6 +351,7 @@ const serviceApiInputWalkthrough = async (context: $TSContext, serviceMetadata) 
       case 'CONTINUE':
         continuePrompt = true;
         break;
+      default:
     }
   }
 
@@ -337,6 +361,9 @@ const serviceApiInputWalkthrough = async (context: $TSContext, serviceMetadata) 
       authConfig,
     },
     resolverConfig,
+    storage: {
+      type: datasourceConfig,
+    },
   };
 };
 
@@ -566,6 +593,21 @@ async function askResolverConflictQuestion(context: $TSContext, resolverConfig, 
 
   return resolverConfigResponse;
 }
+
+const askDatasourceQuestions = async (context: $TSContext, currentDatasourceConfig): Promise<$TSAny> => {
+  let datasourceConfig: $TSObject = {};
+
+  const datasourceQuestion: ListQuestion = {
+    type: 'list',
+    name: 'datasourceConfig',
+    default: currentDatasourceConfig,
+    choices: datasourceTypes,
+    message: 'Select the data storage type',
+  };
+
+  ({ datasourceConfig } = await inquirer.prompt([datasourceQuestion]));
+  return datasourceConfig;
+};
 
 async function askResolverConflictHandlerQuestion(context: $TSContext, modelTypes?) {
   let resolverConfig: $TSObject = {};

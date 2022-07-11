@@ -25,4 +25,7 @@ export class ResolverResourceIDs {
   static ResolverResourceID(typeName: string, fieldName: string): string {
     return `${resourceName(`${typeName}${fieldName}`)}Resolver`;
   }
+  static RDSQueryResolverResourceID(typeName:string, fieldName: string): string {
+    return `Query${resourceName(typeName)}${resourceName(fieldName)}Resolver`;
+  }
 }
