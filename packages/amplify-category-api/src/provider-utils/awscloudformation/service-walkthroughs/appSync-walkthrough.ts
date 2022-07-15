@@ -451,7 +451,7 @@ export const serviceWalkthrough = async (context: $TSContext, serviceMetadata: $
 
   const { templateSelection } = await inquirer.prompt(templateSelectionQuestion);
   const schemaFilePath = path.join(graphqlSchemaDir, templateSelection);
-  schemaContent += transformerVersion === 2 ? defineGlobalSandboxMode(getGraphQLTransformerAuthDocLink(transformerVersion)) : '';
+  schemaContent += (transformerVersion === 2 && basicInfoAnswers.storage.type !== 'RDS') ? defineGlobalSandboxMode(getGraphQLTransformerAuthDocLink(transformerVersion)) : '';
   schemaContent += fs.readFileSync(schemaFilePath, 'utf8');
 
   return {
