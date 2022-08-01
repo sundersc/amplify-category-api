@@ -476,13 +476,14 @@ export class ModelTransformer extends TransformerModelBase implements Transforme
     const resolverKey = `Update${generateResolverKey(typeName, fieldName)}`;
     if (!this.resolverMap[resolverKey]) {
       const hasCustomPrimaryKey = this.hasCustomPrimaryKey(type);
+      const partitionKeyName = this.getPartitionKeyName(type);
       const resolver = ctx.resolvers.generateMutationResolver(
         typeName,
         fieldName,
         resolverLogicalId,
         dataSource,
         MappingTemplate.s3MappingTemplateFromString(
-          generateUpdateRequestTemplate(typeName, isSyncEnabled, hasCustomPrimaryKey),
+          generateUpdateRequestTemplate(typeName, isSyncEnabled, hasCustomPrimaryKey, partitionKeyName),
           `${typeName}.${fieldName}.req.vtl`,
         ),
         MappingTemplate.s3MappingTemplateFromString(
@@ -514,13 +515,14 @@ export class ModelTransformer extends TransformerModelBase implements Transforme
     const dataSource = this.datasourceMap[type.name.value];
     const resolverKey = `delete${generateResolverKey(typeName, fieldName)}`;
     const hasCustomPrimaryKey = this.hasCustomPrimaryKey(type);
+    const partitionKeyName = this.getPartitionKeyName(type);
     if (!this.resolverMap[resolverKey]) {
       this.resolverMap[resolverKey] = ctx.resolvers.generateMutationResolver(
         typeName,
         fieldName,
         resolverLogicalId,
         dataSource,
-        MappingTemplate.s3MappingTemplateFromString(generateDeleteRequestTemplate(isSyncEnabled, hasCustomPrimaryKey), `${typeName}.${fieldName}.req.vtl`),
+        MappingTemplate.s3MappingTemplateFromString(generateDeleteRequestTemplate(isSyncEnabled, hasCustomPrimaryKey, partitionKeyName), `${typeName}.${fieldName}.req.vtl`),
         MappingTemplate.s3MappingTemplateFromString(
           generateDefaultResponseMappingTemplate(isSyncEnabled, true),
           `${typeName}.${fieldName}.res.vtl`,
@@ -855,12 +857,13 @@ export class ModelTransformer extends TransformerModelBase implements Transforme
     const modelIndexFields = type.fields!.filter(field => field.directives?.some(it => it.name.value === 'index')).map(it => it.name.value);
     if (!this.resolverMap[resolverKey]) {
       const hasCustomPrimaryKey = this.hasCustomPrimaryKey(type);
+      const partitionKeyName = this.getPartitionKeyName(type);
       const resolver = ctx.resolvers.generateMutationResolver(
         typeName,
         fieldName,
         resolverLogicalId,
         dataSource,
-        MappingTemplate.s3MappingTemplateFromString(generateCreateRequestTemplate(type.name.value, modelIndexFields, hasCustomPrimaryKey), `${typeName}.${fieldName}.req.vtl`),
+        MappingTemplate.s3MappingTemplateFromString(generateCreateRequestTemplate(type.name.value, modelIndexFields, hasCustomPrimaryKey, partitionKeyName), `${typeName}.${fieldName}.req.vtl`),
         MappingTemplate.s3MappingTemplateFromString(
           generateDefaultResponseMappingTemplate(isSyncEnabled, true),
           `${typeName}.${fieldName}.res.vtl`,
