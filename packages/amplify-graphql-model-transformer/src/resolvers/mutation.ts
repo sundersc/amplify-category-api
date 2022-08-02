@@ -134,7 +134,7 @@ export const generateUpdateRequestTemplate = (modelName: string, isSyncEnabled: 
         key: ref('Key'),
         update: ref('update'),
         ...(hasCustomPrimaryKey && {
-          customPartitionKey: ref(`mergedValues.${partitionKeyName}`),
+          customPartitionKey: str(partitionKeyName),
           populateIndexFields: bool(true),
         }),
         ...(isSyncEnabled && { _version: ref('util.defaultIfNull($args.input["_version"], 0)') }),
@@ -187,7 +187,7 @@ export const generateCreateRequestTemplate = (modelName: string, modelIndexField
         attributeValues: methodCall(ref('util.dynamodb.toMapValues'), ref('mergedValues')),
         condition: ref('condition'),
         ...(hasCustomPrimaryKey && {
-          customPartitionKey: ref(`mergedValues.${partitionKeyName}`),
+          customPartitionKey: str(partitionKeyName),
           populateIndexFields: bool(true),
         }),
       }),
@@ -294,7 +294,7 @@ export const generateDeleteRequestTemplate = (isSyncEnabled: boolean, hasCustomP
   ];
   if (isSyncEnabled) {
     if (hasCustomPrimaryKey) {
-      statements.push(qref(methodCall(ref('DeleteRequest.put'), str('customPartitionKey'), ref(`key.${partitionKeyName}`))));
+      statements.push(qref(methodCall(ref('DeleteRequest.put'), str('customPartitionKey'), str(partitionKeyName))));
       statements.push(qref(methodCall(ref('DeleteRequest.put'), str('populateIndexFields'), bool(true))));
     }
     statements.push(qref(methodCall(ref('DeleteRequest.put'), str('_version'), ref('util.defaultIfNull($args.input["_version"], 0)'))));
