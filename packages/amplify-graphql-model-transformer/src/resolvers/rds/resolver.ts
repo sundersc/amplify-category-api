@@ -22,6 +22,7 @@ import {
 } from 'graphql-mapping-template';
 import { ResourceConstants } from 'graphql-transformer-common';
 import { Stack } from 'aws-cdk-lib';
+
 import { Construct } from 'constructs';
 import {
   Effect,
@@ -31,7 +32,7 @@ import {
   Role,
   ServicePrincipal,
 } from 'aws-cdk-lib/aws-iam';
-import { IFunction, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { IFunction, Runtime, LayerVersion } from 'aws-cdk-lib/aws-lambda';
 import { GraphQLAPIProvider } from '@aws-amplify/graphql-transformer-interfaces';
 import path from 'path';
 import {RDSConnectionSecrets} from '@aws-amplify/graphql-transformer-core';
@@ -54,7 +55,13 @@ export const createRdsLambda = (
     'handler.run',
     path.resolve(__dirname, '..', '..', '..', 'lib', 'rds-lambda.zip'),
     Runtime.NODEJS_16_X,
-    [],
+    [
+      LayerVersion.fromLayerVersionArn(
+        stack,
+        'SQLLambdaLayerVersion',
+        'arn:aws:lambda:us-east-1:663595804066:layer:amplify-sql-core:1',
+      ),
+    ],
     lambdaRole,
     environment,
     undefined,
@@ -80,7 +87,13 @@ export const createRdsLambdaRole = (roleName: string, stack: Construct, secretEn
       new PolicyStatement({
         actions: ['ssm:GetParameter', 'ssm:GetParameters'],
         effect: Effect.ALLOW,
-        resources: [`arn:aws:ssm:*:*:parameter${secretEntry.username}`, `arn:aws:ssm:*:*:parameter${secretEntry.password}`],
+        resources: [
+          `arn:aws:ssm:*:*:parameter${secretEntry.username}`,
+          `arn:aws:ssm:*:*:parameter${secretEntry.password}`,
+          `arn:aws:ssm:*:*:parameter${secretEntry.host}`,
+          `arn:aws:ssm:*:*:parameter${secretEntry.database}`,
+          `arn:aws:ssm:*:*:parameter${secretEntry.port}`,
+        ],
       })
     )
   }

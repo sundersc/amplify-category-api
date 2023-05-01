@@ -21,7 +21,7 @@ export const run = async (context: $TSContext) => {
   printer.warn(PREVIEW_BANNER);
 
   // Disable the command for now
-  throw new Error("This command has been disabled.");
+  // throw new Error("This command has been disabled.");
   
   const apiName = getAppSyncAPIName();
   const apiResourceDir = getAPIResourceDir(apiName);
